@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>D&J Cleaners – Cresskill, NJ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0e1520;
+      --slate: #2a3447;
+      --cobalt: #1a4ed8;
+      --cobalt-light: #e8eefb;
+      --steel: #64748b;
+      --cream: #faf9f7;
+      --white: #ffffff;
+      --border: #e2e5ea;
+      --gold: #b8986a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; color: var(--ink); background: var(--white); overflow-x: hidden; }
+
+    /* LOADER */
+    #loading {
+      position: fixed; inset: 0; background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999; transition: opacity 0.5s ease;
+    }
+    #loading.fade { opacity: 0; pointer-events: none; }
+    .loader-inner { text-align: center; }
+    .loader-ring {
+      width: 36px; height: 36px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%;
+      height: 68px;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+    .nav-logo sup {
+      font-size: 0.6em;
+      color: var(--cobalt);
+      vertical-align: super;
+      font-weight: 400;
+      margin-left: 1px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--steel);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cobalt); }
+    .nav-cta {
+      background: var(--cobalt) !important;
+      color: var(--white) !important;
+      padding: 8px 22px;
+      border-radius: 3px;
+      font-weight: 500 !important;
+      font-size: 0.83rem !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase;
+    }
+    .nav-cta:hover { background: var(--slate) !important; color: var(--white) !important; }
+
+    /* HERO */
+    .hero {
+      padding: 160px 6% 100px;
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-text {
+      position: absolute;
+      right: -2%;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(120px, 18vw, 220px);
+      font-weight: 700;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(26,78,216,0.08);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .hero-inner { max-width: 680px; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 32px;
+      opacity: 0; animation: riseIn 0.7s 0.1s forwards;
+    }
+    .hero-eyebrow-line { width: 32px; height: 1px; background: var(--cobalt); }
+    .hero-eyebrow-text {
+      font-size: 0.75rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--cobalt); font-weight: 500;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5.5vw, 5rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 28px;
+      opacity: 0; animation: riseIn 0.7s 0.25s forwards;
+    }
+    .hero h1 span { color: var(--cobalt); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--steel);
+      line-height: 1.75;
+      font-weight: 300;
+      max-width: 520px;
+      margin-bottom: 44px;
+      opacity: 0; animation: riseIn 0.7s 0.4s forwards;
+    }
+    .hero-actions {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      opacity: 0; animation: riseIn 0.7s 0.55s forwards;
+    }
+    .btn-primary {
+      background: var(--cobalt); color: var(--white);
+      padding: 13px 32px; border-radius: 3px;
+      font-size: 0.85rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none; display: inline-block;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--slate); transform: translateY(-1px); }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--slate);
+      padding: 13px 32px; border-radius: 3px;
+      font-size: 0.85rem; font-weight: 400;
+      letter-spacing: 0.04em;
+      text-decoration: none; display: inline-block;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--cobalt); color: var(--cobalt); transform: translateY(-1px); }
+    .hero-trust {
+      position: absolute; right: 6%; bottom: 10%;
+      display: flex; flex-direction: column; gap: 16px;
+      opacity: 0; animation: riseIn 0.7s 0.7s forwards;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem; color: var(--steel);
+    }
+    .trust-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cobalt); flex-shrink: 0; }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* STATS BAND */
+    .stats-band {
+      background: var(--ink);
+      display: flex; justify-content: center;
+      gap: 0;
+    }
+    .stat-item {
+      flex: 1; max-width: 220px;
+      text-align: center;
+      padding: 40px 24px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+      display: block;
+    }
+
+    /* SERVICES */
+    .services { padding: 100px 6%; background: var(--white); }
+    .section-header { margin-bottom: 60px; }
+    .section-eyebrow {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    }
+    .section-eyebrow-line { width: 24px; height: 1px; background: var(--cobalt); }
+    .section-eyebrow-text {
+      font-size: 0.72rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--cobalt); font-weight: 500;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+    .section-sub {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: var(--steel);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 480px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      background: var(--white);
+      padding: 36px 28px;
+      transition: background 0.25s;
+      cursor: default;
+    }
+    .service-card:hover { background: var(--cobalt-light); }
+    .service-icon { font-size: 1.8rem; margin-bottom: 18px; display: block; }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem; font-weight: 600;
+      color: var(--ink); margin-bottom: 10px;
+    }
+    .service-desc { font-size: 0.87rem; color: var(--steel); line-height: 1.65; font-weight: 300; }
+    .service-price {
+      margin-top: 18px;
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--cobalt);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* PROCESS */
+    .process { padding: 100px 6%; background: var(--cream); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+    .process-step { position: relative; }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .step-title { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+    .step-desc { font-size: 0.85rem; color: var(--steel); line-height: 1.65; font-weight: 300; }
+
+    /* WHY */
+    .why { padding: 100px 6%; background: var(--ink); }
+    .why .section-title { color: var(--white); }
+    .why .section-sub { color: rgba(255,255,255,0.45); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+    .why-card {
+      padding: 28px 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 2px;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .why-card:hover { border-color: var(--cobalt); background: rgba(26,78,216,0.06); }
+    .why-icon { font-size: 1.5rem; margin-bottom: 14px; display: block; }
+    .why-title { font-size: 0.95rem; font-weight: 500; color: var(--white); margin-bottom: 8px; }
+    .why-text { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.65; font-weight: 300; }
+
+    /* TESTIMONIALS */
+    .testimonials { padding: 100px 6%; background: var(--white); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .testimonial {
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      position: relative;
+    }
+    .testimonial::before {
+      content: '\201C';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      color: var(--cobalt-light);
+      position: absolute;
+      top: 12px; left: 24px;
+      line-height: 1;
+    }
+    .testimonial-text {
+      font-size: 0.92rem;
+      color: var(--slate);
+      line-height: 1.75;
+      font-weight: 300;
+      font-style: italic;
+      margin-top: 20px;
+    }
+    .testimonial-stars { color: var(--gold); letter-spacing: 2px; font-size: 0.9rem; }
+    .testimonial-author {
+      margin-top: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--ink);
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    /* INFO */
+    .info { padding: 100px 6%; background: var(--cream); }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 60px;
+    }
+    @media (max-width: 680px) { .info-grid { grid-template-columns: 1fr; gap: 48px; } }
+    .info-block-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 600;
+      color: var(--ink);
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--ink);
+      margin-bottom: 24px;
+    }
+    .hours-row {
+      display: flex; justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+    .hours-day { color: var(--ink); font-weight: 400; }
+    .hours-time { color: var(--steel); }
+    .contact-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 22px;
+    }
+    .contact-icon-wrap {
+      width: 36px; height: 36px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .contact-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--steel); }
+    .contact-value { font-size: 0.92rem; color: var(--ink); font-weight: 400; margin-top: 3px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      padding: 32px 6%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: rgba(255,255,255,0.6);
+    }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-trust { display: none; }
+      .stats-band { flex-wrap: wrap; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loading"><div class="loader-inner"><div class="loader-ring"></div></div></div>
+
+<nav>
+  <div class="nav-logo" id="nav-name">D&J<sup>®</sup></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">How It Works</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text" id="hero-bg-text">CLEAN</div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <div class="hero-eyebrow-text" id="hero-location">Cresskill, NJ · Est. 2005</div>
+    </div>
+    <h1 id="hero-headline">Precision Care<br>for Every <span>Garment.</span></h1>
+    <p class="hero-sub" id="hero-sub">Trusted dry cleaning and garment care for Cresskill and Bergen County. We treat every item with the attention it deserves — from everyday wear to your most prized pieces.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary" id="hero-cta">Get In Touch</a>
+      <a href="#services" class="btn-ghost">See Our Services</a>
+    </div>
+  </div>
+  <div class="hero-trust" id="trust-list"></div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item">
+    <span class="stat-num" id="stat-years">20+</span>
+    <span class="stat-label">Years in Business</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" id="stat-clients">5,000+</span>
+    <span class="stat-label">Happy Customers</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" id="stat-items">50K+</span>
+    <span class="stat-label">Garments Cleaned</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" id="stat-rating">5★</span>
+    <span class="stat-label">Average Rating</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <div class="section-eyebrow-text">What We Do</div>
+    </div>
+    <div class="section-title" id="services-title">Our Services</div>
+    <div class="section-sub" id="services-sub">From dress shirts to wedding gowns, we handle every garment with care and expertise.</div>
+  </div>
+  <div class="services-grid" id="services-grid"></div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-header">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <div class="section-eyebrow-text">How It Works</div>
+    </div>
+    <div class="section-title">Simple as 1, 2, 3</div>
+    <div class="section-sub">Getting your clothes cleaned has never been easier.</div>
+  </div>
+  <div class="process-steps" id="process-steps"></div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="section-header">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <div class="section-eyebrow-text">Why Choose Us</div>
+    </div>
+    <div class="section-title" id="why-title">The D&J Standard</div>
+    <div class="section-sub" id="why-sub">We've built our reputation one garment at a time.</div>
+  </div>
+  <div class="why-grid" id="why-grid"></div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <div class="section-header">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <div class="section-eyebrow-text">Reviews</div>
+    </div>
+    <div class="section-title">What Our Customers Say</div>
+  </div>
+  <div class="testimonials-grid" id="testimonials-grid"></div>
+</section>
+
+<!-- HOURS & CONTACT -->
+<section class="info" id="hours">
+  <div class="section-header">
+    <div class="section-eyebrow">
+      <div class="section-eyebrow-line"></div>
+      <div class="section-eyebrow-text">Find Us</div>
+    </div>
+    <div class="section-title">Hours & Contact</div>
+  </div>
+  <div class="info-grid">
+    <div>
+      <div class="info-block-title">Business Hours</div>
+      <div id="hours-list"></div>
+    </div>
+    <div id="contact">
+      <div class="info-block-title">Get In Touch</div>
+      <div id="contact-list"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo" id="footer-name">D&J Cleaners</div>
+  <div class="footer-copy">© <span id="footer-year"></span> D&J Cleaners · Cresskill, NJ · All rights reserved.</div>
+</footer>
+
+<script>
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZGVZ7_kUXC4JlA7nedRXEpKoX3giIpUqbodW-3bzLtr9sta0NPGYp_C-jdx_pt8MyJcElWtkOpL0L/pub?gid=0&single=true&output=csv";
+
+  const FALLBACK = {
+    business_name: "D&J Cleaners",
+    tagline: "Precision Care for Every Garment.",
+    location: "Cresskill, NJ",
+    established: "2005",
+    phone: "(201) 555-0192",
+    email: "hello@djcleaners.com",
+    address: "123 Main St, Cresskill, NJ 07626",
+    hero_sub: "Trusted dry cleaning and garment care for Cresskill and Bergen County. We treat every item with the attention it deserves — from everyday wear to your most prized pieces.",
+    stat_years: "20+",
+    stat_clients: "5,000+",
+    stat_items: "50K+",
+    stat_rating: "5★",
+    trust_1: "Free same-day service available",
+    trust_2: "Eco-friendly cleaning solvents",
+    trust_3: "Satisfaction guaranteed",
+    services: [
+      { icon: "👔", name: "Dry Cleaning", desc: "Expert care for suits, dresses, coats, and delicate fabrics. We inspect every item before and after.", price: "From $8" },
+      { icon: "👗", name: "Formal & Bridal", desc: "Wedding gowns, bridesmaid dresses, tuxedos. Preservation boxes available.", price: "From $120" },
+      { icon: "👕", name: "Wash & Fold", desc: "Everyday laundry washed, dried, and neatly folded. Ready next day.", price: "From $1.50/lb" },
+      { icon: "🧥", name: "Alterations", desc: "Tailoring and repairs by our in-house seamstress. Hems, zippers, resizing.", price: "From $12" },
+      { icon: "🛏", name: "Household Items", desc: "Comforters, drapes, tablecloths, and area rugs cleaned to perfection.", price: "From $25" },
+      { icon: "🪡", name: "Leather & Suede", desc: "Specialist cleaning and conditioning for leather jackets, bags, and suede garments.", price: "From $45" },
+    ],
+    process: [
+      { num: "01", title: "Drop Off", desc: "Bring your items to our Cresskill location. We'll tag and inspect everything on the spot." },
+      { num: "02", title: "We Clean", desc: "Your garments are cleaned using the right method for each fabric type." },
+      { num: "03", title: "Pick Up", desc: "Your items are pressed, packaged, and ready for pick-up — usually next day." },
+    ],
+    why: [
+      { icon: "🏅", title: "20+ Years Experience", text: "Serving Cresskill and Bergen County since 2005. We know fabrics inside and out." },
+      { icon: "🌿", title: "Eco-Friendly Solvents", text: "We use non-perc, environmentally responsible cleaning agents safe for your family." },
+      { icon: "✅", title: "Satisfaction Guarantee", text: "Not happy? We'll re-clean for free or give you a full refund. No questions asked." },
+      { icon: "⚡", title: "Same-Day Service", text: "Drop off by 9 AM and pick up by 5 PM. Available Monday through Friday." },
+    ],
+    testimonials: [
+      { stars: 5, text: "They saved my wedding dress after a spill at the reception. I honestly thought it was ruined. D&J had it looking brand new — I was in tears.", author: "— Amanda K., Cresskill" },
+      { stars: 5, text: "Best dry cleaner in Bergen County, full stop. My suits always come back crisp. Been a customer for 8 years.", author: "— Michael T., Tenafly" },
+      { stars: 5, text: "Same-day service is a lifesaver. I travel for work constantly and they always come through. Incredibly reliable.", author: "— Rachel S., Alpine" },
+    ],
+    hours: [
+      { day: "Monday – Friday", time: "7:00 AM – 7:00 PM" },
+      { day: "Saturday", time: "8:00 AM – 5:00 PM" },
+      { day: "Sunday", time: "Closed" },
+    ]
+  };
+
+  function renderPage(d) {
+    document.title = `${d.business_name} – ${d.location}`;
+    setEl("nav-name", `${d.business_name}<sup>®</sup>`, true);
+    setEl("hero-location", `${d.location} · Est. ${d.established}`);
+    setEl("hero-bg-text", d.business_name.split(" ")[0].toUpperCase());
+    const taglineParts = d.tagline.split(" ");
+    const lastWord = taglineParts.pop();
+    setEl("hero-headline", `${taglineParts.join(" ")}<br><span>${lastWord}</span>`, true);
+    setEl("hero-sub", d.hero_sub);
+    setEl("stat-years", d.stat_years);
+    setEl("stat-clients", d.stat_clients);
+    setEl("stat-items", d.stat_items);
+    setEl("stat-rating", d.stat_rating);
+    setEl("footer-name", d.business_name);
+    document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+    // Trust items
+    const trustKeys = ["trust_1","trust_2","trust_3"];
+    document.getElementById("trust-list").innerHTML = trustKeys
+      .filter(k => d[k])
+      .map(k => `<div class="trust-item"><div class="trust-dot"></div><span>${d[k]}</span></div>`).join("");
+
+    // Services
+    document.getElementById("services-grid").innerHTML = d.services.map(s => `
+      <div class="service-card">
+        <span class="service-icon">${s.icon}</span>
+        <div class="service-name">${s.name}</div>
+        <div class="service-desc">${s.desc}</div>
+        <div class="service-price">${s.price}</div>
+      </div>`).join("");
+
+    // Process
+    document.getElementById("process-steps").innerHTML = d.process.map(p => `
+      <div class="process-step">
+        <div class="step-num">${p.num}</div>
+        <div class="step-title">${p.title}</div>
+        <div class="step-desc">${p.desc}</div>
+      </div>`).join("");
+
+    // Why
+    document.getElementById("why-grid").innerHTML = d.why.map(w => `
+      <div class="why-card">
+        <span class="why-icon">${w.icon}</span>
+        <div class="why-title">${w.title}</div>
+        <div class="why-text">${w.text}</div>
+      </div>`).join("");
+
+    // Testimonials
+    document.getElementById("testimonials-grid").innerHTML = d.testimonials.map(t => `
+      <div class="testimonial">
+        <div class="testimonial-stars">${"★".repeat(t.stars)}</div>
+        <div class="testimonial-text">${t.text}</div>
+        <div class="testimonial-author">${t.author}</div>
+      </div>`).join("");
+
+    // Hours
+    document.getElementById("hours-list").innerHTML = d.hours.map(h => `
+      <div class="hours-row">
+        <span class="hours-day">${h.day}</span>
+        <span class="hours-time">${h.time}</span>
+      </div>`).join("");
+
+    // Contact
+    document.getElementById("contact-list").innerHTML = `
+      <div class="contact-row">
+        <div class="contact-icon-wrap">📞</div>
+        <div><div class="contact-label">Phone</div><div class="contact-value">${d.phone}</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">✉️</div>
+        <div><div class="contact-label">Email</div><div class="contact-value">${d.email}</div></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-icon-wrap">📍</div>
+        <div><div class="contact-label">Address</div><div class="contact-value">${d.address}</div></div>
+      </div>`;
+
+    setTimeout(() => {
+      const l = document.getElementById("loading");
+      l.classList.add("fade");
+      setTimeout(() => l.remove(), 500);
+    }, 350);
+  }
+
+  function setEl(id, val, isHTML = false) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    isHTML ? el.innerHTML = val : el.textContent = val;
+  }
+
+  function parseCSV(csv) {
+    const data = {};
+    csv.trim().split("\n").forEach(row => {
+      const [key, ...rest] = row.split(",").map(c => c.trim().replace(/^"|"$/g, ""));
+      if (key) data[key] = rest.filter(Boolean).join(", ");
+    });
+    return data;
+  }
+
+  function sheetToData(raw) {
+    const d = JSON.parse(JSON.stringify(FALLBACK));
+    const simple = ["business_name","tagline","location","established","phone","email","address","hero_sub","stat_years","stat_clients","stat_items","stat_rating","trust_1","trust_2","trust_3"];
+    simple.forEach(k => { if (raw[k]) d[k] = raw[k]; });
+
+    const services = [];
+    for (let i = 1; i <= 8; i++) {
+      if (raw[`service_${i}_name`]) services.push({ icon: raw[`service_${i}_icon`]||"✨", name: raw[`service_${i}_name`], desc: raw[`service_${i}_desc`]||"", price: raw[`service_${i}_price`]||"" });
+    }
+    if (services.length) d.services = services;
+
+    const process = [];
+    for (let i = 1; i <= 5; i++) {
+      if (raw[`process_${i}_title`]) process.push({ num: String(i).padStart(2,"0"), title: raw[`process_${i}_title`], desc: raw[`process_${i}_desc`]||"" });
+    }
+    if (process.length) d.process = process;
+
+    const why = [];
+    for (let i = 1; i <= 6; i++) {
+      if (raw[`why_${i}_title`]) why.push({ icon: raw[`why_${i}_icon`]||"⭐", title: raw[`why_${i}_title`], text: raw[`why_${i}_text`]||"" });
+    }
+    if (why.length) d.why = why;
+
+    const hours = [];
+    for (let i = 1; i <= 7; i++) {
+      if (raw[`hours_${i}_day`]) hours.push({ day: raw[`hours_${i}_day`], time: raw[`hours_${i}_time`]||"" });
+    }
+    if (hours.length) d.hours = hours;
+
+    return d;
+  }
+
+  async function init() {
+    if (SHEET_CSV_URL && SHEET_CSV_URL !== "YOUR_GOOGLE_SHEET_CSV_URL_HERE") {
+      try {
+        const res = await fetch(SHEET_CSV_URL);
+        const csv = await res.text();
+        renderPage(sheetToData(parseCSV(csv)));
+      } catch(e) {
+        console.warn("Sheet fetch failed, using fallback.", e);
+        renderPage(FALLBACK);
+      }
+    } else {
+      renderPage(FALLBACK);
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
